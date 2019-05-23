@@ -27,7 +27,7 @@ def bisection(f, a, b, eps=1e-5, n=20):
     # checking if segment is valid
     if f(a) * f(b) < 0:
         for iteration in range(n):
-            x = (a+b) / 2  # half of the segment
+            x = (a+b) / 2
             if f(x) <= eps:
                 return x
             else:
