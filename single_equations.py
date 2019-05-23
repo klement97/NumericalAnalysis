@@ -35,3 +35,5 @@ def bisection(f, a, b, eps=1e-5, n=20):
                     a = x
                 else:
                     b = x
+    else:
+        print("Check your segment")
