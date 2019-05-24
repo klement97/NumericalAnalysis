@@ -77,3 +77,32 @@ def fixed_point(f, x0, eps=1e-5, n=20):
             x0 = a
     else:
         print("No convergence after {} iterations".format(n))
+
+
+def lagrange(f, a, b, eps=1e-5, n=15):
+
+    """
+    Approximating root using Lagrange's Method.
+    Root must be isolated in the segment [a,b]
+    This method is faster than bisection and fixed-point most of the times.
+    Method stand on selecting two points inside the segment [a,b] as a base approximation and
+    another fixed point to use in formula and finding better approximations using Lagrange's formula.
+    We will select:
+                    x0 = a
+                    c = b
+
+    :param f: function
+    :param a: bottom of the segment
+    :param b: top of the segment
+    :param eps: max error
+    :param n: max number of iterations
+    :return x: approximation of root
+    """
+    x0 = a
+    c = b
+    for i in range(n):
+        x = x0 - (f(x0) / f(x0) - f(c)) * (x0 - c)
+        if f(x) <= eps:
+            return x
+        else:
+            x0 = x
