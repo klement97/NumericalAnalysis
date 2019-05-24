@@ -31,3 +31,7 @@ class SingleEquationsTestCase(unittest.TestCase):
                                            df=lambda x: 1+math.exp(x),
                                            a=0, b=1),
                                0.442855, 5)
+
+    def test_secant(self):
+        self.assertAlmostEqual(se.secant(f=lambda x: x + math.exp(x) - 2, a=0, b=1),
+                               0.442855, 5)

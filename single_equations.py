@@ -162,3 +162,33 @@ def combined(f, df, a, b, eps=1e-5, n=10):
                 b = x_n
     else:
         print("There is no root inside this segment.")
+
+
+def secant(f, a, b, eps=1e-5, n=10):
+
+    """
+    In cases we can't calculate derivative of a function to use newton's method
+    secant method comes in help.
+    Secant method's uses approximation of the derivative of the function instead of the derivative itself.
+    Secant method is super linear, it's convergence speed is approximately 1.6
+
+    :param f: function
+    :param a: bottom of the segment
+    :param b: top of the segment
+    :param eps: max error: 1e-5 by default
+    :param n: max number of iterations: 10 by default
+    :return x: approximation with specified error
+    """
+
+    x0 = a
+    x1 = b
+
+    if math.fabs(f(x0)) > math.fabs(f(x1)):
+        x0, x1 = x1, x0
+
+    for i in range(n):
+        x1 = x0 - (f(x1) * (x1 - x0) / (f(x1) - f(x0)))
+        if math.fabs(f(x1)) <= eps:
+            return x1
+        else:
+            x0 = x1
