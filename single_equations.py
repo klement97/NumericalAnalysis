@@ -207,3 +207,59 @@ def secant(f, x0, x1, eps=1e-5, n=10):
 
     else:
         print("No convergence after {} iterations".format(n))
+
+
+def dekker_brent(f, x0, x1, eps=1e-5):
+    """
+    This method is a combination of lagrange, secant and bisection methods.
+    Method is proposed by Dekker and modified by Brent.
+    It is much more complicated but it's important characteristics are as follows:
+        suppose we have 3 points in k-th iteration: Xk, Xk-1, Yk
+        Xk: newest point
+        Xk-1: previous point
+        Yk: newest point for which f(Xk)f(Yk) < 0
+
+    inside the segment [Xk, Yk] there is a root of our equation
+
+    Xk+1 is found by secant method
+    if Xk+1 is inside the segment it is accepted as next approximation
+    else  half of the segment is accepted as next approximation
+
+    Yk+1 is found as follows:
+        Yk+1 = Xk if f(Xk)f(Xk+1) < 0
+        Yk+1 = Yk otherwise
+
+    :param f: function
+    :param x0: bottom of the segment
+    :param x1: top of the segment
+    :param eps: max error: 1e-5 by default
+
+    :return x: approximation with specified error
+    """
+    sign = lambda x: math.copysign(1, x)
+
+    y1 = x0
+    y0 = y1 + 1
+    y_1 = y0
+    f0 = f(x0)
+    f1 = f(x1)
+
+    while math.fabs(x0 - x1) > eps*math.fabs(x1) & math.fabs(f1) > eps:
+        if y1 != y_1:
+            d = f1 * (x1 - x0) / (f1 - f0)
+            if sign(d) != sign(x1-y1) | math.fabs(d) > math.fabs(x1 - y1):
+                d = 0.5 * (x0 + x1)
+        else:
+            d = 0.5 * (x0 + x1)
+
+        x0 = x1 - ((f1 * (x1 - x0)) / (f1 - f0))
+        f0 = f1
+        x1 = x1 - d
+        f1 = f(x1)
+        y_1 = y0
+        y0 = y1
+
+        if f0 * f1 < 0:
+            y1 = x0
+
+    return (x0 + x1) / 2
