@@ -1,6 +1,3 @@
-import math
-
-
 """
 Solving equations by approximating roots using Approximation Methods from Numerical Analysis
 
@@ -13,6 +10,8 @@ Solving equations by approximating roots using Approximation Methods from Numeri
     - Dekker-Brent method
 
 """
+
+import math
 
 
 def bisection(f, a, b, eps=1e-5, n=20):
@@ -36,7 +35,7 @@ def bisection(f, a, b, eps=1e-5, n=20):
         for iteration in range(n):
             x = (a+b) / 2
             # checking if x is close enough to the root
-            if f(x) <= eps:
+            if math.fabs(f(x)) <= eps:
                 return x
 
             else:
@@ -69,7 +68,7 @@ def fixed_point(f, x0, eps=1e-5, n=20):
         x1 = f(x0)
         x2 = f(x1)
         a = (x0*x2 - x1**2) / (x2 - 2*x1 + x0)
-        if f(a) <= eps:
+        if math.fabs(f(a)) <= eps:
             return a
         if math.fabs(x1 - x2) < eps * math.fabs(x1):
             return a
@@ -79,7 +78,7 @@ def fixed_point(f, x0, eps=1e-5, n=20):
         print("No convergence after {} iterations".format(n))
 
 
-def lagrange(f, a, b, eps=1e-5, n=15):
+def lagrange(f, a, b, eps=1e-5, n=30):
 
     """
     Approximating root using Lagrange's Method.
@@ -101,8 +100,65 @@ def lagrange(f, a, b, eps=1e-5, n=15):
     x0 = a
     c = b
     for i in range(n):
-        x = x0 - (f(x0) / f(x0) - f(c)) * (x0 - c)
-        if f(x) <= eps:
+        x = x0 - (f(x0) / (f(x0) - f(c))) * (x0 - c)
+        if math.fabs(f(x)) <= eps:
             return x
         else:
             x0 = x
+
+
+def newton(f, df, x0, eps=1e-5, n=10):
+    """
+    Newton's method for finding roots of an equation.
+    Approximation found by this method is doubled in precision after every iteration.
+    This is the fastest method in most cases.
+    Only disadvantage of this method is that it requires first derivative of the function.
+
+    :param f: function ,
+    :param df: first derivative of function,
+    :param x0: top of the segment,
+    :param eps: max error,
+    :param n: max number of iterations,
+    :return x: approximation found by iterative formula.
+    """
+
+    for i in range(n):  # first critter: max number of iterations
+        x = x0 - f(x0)/df(x0)
+
+        if math.fabs(f(x)) <= eps:  # second critter: function at this point is close enough to zero
+            return x
+        else:
+            x0 = x
+
+
+def combined(f, df, a, b, eps=1e-5, n=10):
+    """
+    This method combines three methods: newton, lagrange and bisection.
+    Using lagrange to approximate root from left,
+    newton to approximate root from right
+    and bisection to take half of the two approximations.
+    Usually newton goes faster than lagrange so taking their mean is faster
+    than using only one of the methods.
+
+    :param f: function
+    :param df: first derivative of function which is used in newtons method
+    :param a: bottom of the segment
+    :param b: top of the segment
+    :param eps: max error: 1e-5 by default
+    :param n: max number of iterations: 10 by default
+    :return x: approximation with specified error
+    """
+
+    if f(a) * f(b) < 0:
+        for i in range(n):
+            x_l = a - (f(a) / (f(a) - f(b))) * (a - b)
+            x_n = b - f(b)/df(b)
+            x = (x_l + x_n) / 2
+
+            if math.fabs(f(x)) <= eps:
+                return x
+            else:
+                a = x_l
+                b = x_n
+    else:
+        print("There is no root inside this segment.")
