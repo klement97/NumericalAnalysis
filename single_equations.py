@@ -244,10 +244,10 @@ def dekker_brent(f, x0, x1, eps=1e-5):
     f0 = f(x0)
     f1 = f(x1)
 
-    while math.fabs(x0 - x1) > eps*math.fabs(x1) & math.fabs(f1) > eps:
+    while (math.fabs(x0 - x1) >= eps*math.fabs(x1)) & (math.fabs(f1) >= eps):
         if y1 != y_1:
             d = f1 * (x1 - x0) / (f1 - f0)
-            if sign(d) != sign(x1-y1) | math.fabs(d) > math.fabs(x1 - y1):
+            if (sign(d) != sign(x1-y1)) | (math.fabs(d) > math.fabs(x1 - y1)):
                 d = 0.5 * (x0 + x1)
         else:
             d = 0.5 * (x0 + x1)
@@ -262,4 +262,4 @@ def dekker_brent(f, x0, x1, eps=1e-5):
         if f0 * f1 < 0:
             y1 = x0
 
-    return (x0 + x1) / 2
+    return x1
