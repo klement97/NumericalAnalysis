@@ -236,7 +236,7 @@ def dekker_brent(f, x0, x1, eps=1e-5):
 
     :return x: approximation with specified error
     """
-    sign = lambda x: math.copysign(1, x)
+    def sign(x): return math.copysign(1, x)
 
     y1 = x0
     y0 = y1 + 1
