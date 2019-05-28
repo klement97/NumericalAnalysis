@@ -207,3 +207,4 @@ def secant(f, x0, x1, eps=1e-5, n=10):
 
     else:
         print("No convergence after {} iterations".format(n))
+
