@@ -236,4 +236,3 @@ def dekker_brent(f, x0, x1, eps=1e-5):
 
     :return x: approximation with specified error
     """
-
