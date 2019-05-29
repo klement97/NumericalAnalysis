@@ -20,6 +20,14 @@ a = np.arange(15).reshape(3, 5)
 
 
 def gauss_nn(a, b):
+    """
+    Gaussian elimination or forward elimination
+
+    :param a: matrix of coefficients
+    :param b: vector of free terms
+    :return x: vector x: solution of system Ax = b
+    """
+
     n = a.shape[0]  # number of rows
     a = np.array(a)
     b = np.array(b)
